@@ -49,12 +49,14 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     /**
      * 测试环境：1920x1080 字体缩放124% 百分浏览器最大化
-     * <p>
-     * 1. 点击花灵派对的逛一逛，等待出现米米号的输入框
-     * 2. 输入米米号，等待出现点赞
-     * 3. 点击头像，等待出现面板，sikuli到此结束
-     * 4. 使用Selenium按照给定的参数缩放画面并执行page.screenshot（返回base64）
-     * 5. 把base64转换为字节码
+     * <ol>
+     * <li> 点击花灵派对的逛一逛，等待出现米米号的输入框</li>
+     * <li> 输入米米号，等待出现点赞</li>
+     * <li> 点击头像，等待出现面板</li>
+     * <li> 等待出现社区形象按钮并点击，等待社区形象按钮变亮，Sikuli到此结束</li>
+     * <li> 使用Selenium按照给定的参数缩放画面并执行<pre>page.screenshot</pre>（返回base64）</li>
+     * <li> 把base64转换为字节码</li>
+     * </ol>
      */
     @Override
     public BufferedImage getResult(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX,
@@ -99,31 +101,29 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             map.put("width", resolutionX);
             map.put("height", resolutionY);
             map.put("deviceScaleFactor", 1);
-
             driver.executeCdpCommand("Emulation.setDeviceMetricsOverride", map);
-
+            // 缩放Flash
             driver.executeScript("document.getElementsByTagName(\"embed\")[0].Zoom(500)");
+            // Flash缩放后的视野位置微调
             driver.executeScript("document.getElementsByTagName(\"embed\")[0].Zoom(" + (new Float(10000 / scale / 100)).intValue() + ");document.getElementsByTagName(\"embed\")[0].Pan(" + offsetX + ", " + offsetY + ", 0)");
-
+            // 等待Flash缩放完成，待完善
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-
+            // 执行截图
             Map<String, Object> map2 = new HashMap<>();
             map2.put("fromSurface", true);
-
             String imageBase64 = driver.executeCdpCommand("Page.captureScreenshot", map2).get("data").toString();
-
             System.out.println(imageBase64.length());
-
+            // 关闭设备模拟
             driver.executeCdpCommand("Emulation.clearDeviceMetricsOverride", new HashMap<>());
-
+            // Flash缩放复原
             driver.executeScript("document.getElementsByTagName(\"embed\")[0].Zoom(500)");
-
+            // 关闭面板，等待后续的截图请求
             s.click(imagePath + "cross.png");
-
+            // 返回的base64内容写入PNG文件
             return base64StringToImage(imageBase64);
 
 

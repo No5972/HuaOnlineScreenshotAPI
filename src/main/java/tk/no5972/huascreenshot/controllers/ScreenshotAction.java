@@ -2,6 +2,7 @@ package tk.no5972.huascreenshot.controllers;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +28,7 @@ public class ScreenshotAction {
 			Integer scale, 
 			Integer offsetX,
 			Integer offsetY,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws IOException {
 		try {
 			Screen s = new Screen();
 			System.out.println(s);
@@ -55,6 +56,18 @@ public class ScreenshotAction {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception ee) {
+			System.err.println("测试");
+			response.reset();
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().write("<h1>500 好像出错了啦！</h1><hr>错误信息：<pre>" + ee.toString() + ee.getLocalizedMessage() + "<br>");
+			for(StackTraceElement es : ee.getStackTrace()){
+				response.getWriter().write("在 " + es.toString());
+				response.getWriter().write("<br />");
+			}
+			response.getWriter().write("</pre>");
 		}
 	}
 }

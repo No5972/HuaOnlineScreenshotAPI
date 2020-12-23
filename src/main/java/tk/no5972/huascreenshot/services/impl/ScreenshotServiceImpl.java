@@ -25,7 +25,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
     static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FindFailed {
 		new ScreenshotServiceImpl().getResult(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
 		System.out.println("test");
 	}
@@ -53,7 +53,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 	 */
 	@Override
 	public BufferedImage getResult(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX,
-			Integer offsetY) {
+			Integer offsetY) throws FindFailed {
 		try {
 			Screen s = new Screen();
 			// 点击逛一逛
@@ -127,10 +127,9 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 			
 			
 		} catch (FindFailed e) {
-			e.printStackTrace();
+			throw e;
 		}
-		
-		return null;
+
 	}
 
 }

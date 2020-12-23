@@ -19,6 +19,8 @@ import tk.no5972.huascreenshot.services.ScreenshotService;
 public class ScreenshotAction {
 	@Autowired
 	private ScreenshotService screenshotService;
+
+	private boolean isAvailble = true;
 	
 	@RequestMapping("/screenshot")
 	public void screenshot(
@@ -30,6 +32,15 @@ public class ScreenshotAction {
 			Integer offsetY,
 			HttpServletResponse response) throws IOException {
 		try {
+			System.out.println(isAvailble);
+			if (!isAvailble) {
+				response.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html");
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.getWriter().write("<title>503 功能正在被占用，等会再试试哦！</title><h1>503 功能正在被占用，等会再试试哦！</h1><hr>错误信息：<pre>503 Service Temporarily Unavailble</pre>");
+				return;
+			}
+			isAvailble = false;
 			Screen s = new Screen();
 			System.out.println(s);
 			/*
@@ -52,7 +63,7 @@ public class ScreenshotAction {
 			response.setContentType("image/png");
 			BufferedImage bufferedImage = screenshotService.getResult(miNum, resolutionX, resolutionY, scale, offsetX, offsetY);
 			ImageIO.write(bufferedImage, "png", response.getOutputStream());
-
+			isAvailble = true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,6 +79,7 @@ public class ScreenshotAction {
 				response.getWriter().write("<br />");
 			}
 			response.getWriter().write("</pre>");
+			isAvailble = true;
 		}
 	}
 }

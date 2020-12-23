@@ -22,7 +22,7 @@ public class ScreenshotAction {
 
 	private boolean isAvailble = true;
 	
-	@RequestMapping("/screenshot")
+	@RequestMapping("/screenshot.png")
 	public void screenshot(
 			Long miNum,
 			Integer resolutionX, 

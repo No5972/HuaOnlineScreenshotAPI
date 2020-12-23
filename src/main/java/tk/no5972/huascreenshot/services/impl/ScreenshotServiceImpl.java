@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Match;
 import org.sikuli.script.Screen;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import sun.misc.BASE64Decoder;
@@ -24,6 +25,10 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 	
     static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
     static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+
+    @Value("${sikuli.hua.imagePath}")
+	private String imagePath;
+
 
 	public static void main(String[] args) throws FindFailed {
 		new ScreenshotServiceImpl().getResult(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
@@ -57,7 +62,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 		try {
 			Screen s = new Screen();
 			// 点击逛一逛
-			String imagePath = "C:/Users/Admin/Pictures/autoscreenshot/";
+			String imagePath = this.imagePath;
 			s.click(imagePath + "gyg.png");
 			// 等待加载并输入米米号
 			s.wait(imagePath + "inputMi.png", 15);

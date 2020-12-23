@@ -62,7 +62,7 @@ public class ScreenshotAction {
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().write("<h1>500 好像出错了啦！</h1><hr>错误信息：<pre>" + ee.toString() + ee.getLocalizedMessage() + "<br>");
+			response.getWriter().write("<title>500 好像出错了啦！</title><h1>500 好像出错了啦！</h1><hr>错误信息：<pre>" + ee.toString() + ee.getLocalizedMessage() + "<br>");
 			for(StackTraceElement es : ee.getStackTrace()){
 				response.getWriter().write("在 " + es.toString());
 				response.getWriter().write("<br />");

@@ -9,8 +9,9 @@
 <html>
 <head>
     <title>小花仙 - 根据米米号获取高清形象</title>
-    <link rel="stylesheet" href="/layui.css?t=<%=new Date().getTime()%>" media="all">
-    <script src="/layui.js?t=<%=new Date().getTime()%>"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/layui.css?t=<%=new Date().getTime()%>" media="all">
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/favicon.ico" />
+    <script src="${pageContext.request.contextPath}/layui.js?t=<%=new Date().getTime()%>"></script>
 </head>
 <body class="layui-bg-gray" style="text-align: center">
     <div class="layui-card" style="width: 500px; padding: 30px; margin: 0 auto;">

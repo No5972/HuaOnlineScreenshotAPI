@@ -1,5 +1,7 @@
 package tk.no5972.huascreenshot.services.impl;
 
+import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,22 +31,209 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Value("${sikuli.hua.imagePath}")
     private String imagePath;
 
+    @Value("#{'${robot.gyg.coord}'.split(',')}")
+    private int[] gygCoord;
 
-    public static void main(String[] args) throws FindFailed {
-        new ScreenshotServiceImpl().getResult(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
+    @Value("#{'${robot.inputMi.color}'.split(',')}")
+    private int[] inputMiColor;
+
+    @Value("#{'${robot.inputMi.coord}'.split(',')}")
+    private int[] inputMiCoord;
+
+    @Value("#{'${robot.inputMi.rect}'.split(',')}")
+    private int[] inputMiRect;
+
+    @Value("#{'${robot.confirmMi.coord}'.split(',')}")
+    private int[] confirmMiCoord;
+
+    @Value("#{'${robot.dianzan.color}'.split(',')}")
+    private int[] dianzanColor;
+
+    @Value("#{'${robot.dianzan.coord}'.split(',')}")
+    private int[] dianzanCoord;
+
+    @Value("#{'${robot.dianzan.rect}'.split(',')}")
+    private int[] dianzanRect;
+
+    @Value("#{'${robot.shequxinxiang.coord}'.split(',')}")
+    private int[] shequxinxiangCoord;
+
+    @Value("#{'${robot.shequxinxiang.rect}'.split(',')}")
+    private int[] shequxinxiangRect;
+
+    @Value("#{'${robot.shequxinxiang.color}'.split(',')}")
+    private int[] shequxinxiangColor;
+
+    @Value("#{'${robot.shequxinxiangL.coord}'.split(',')}")
+    private int[] shequxinxiangLCoord;
+
+    @Value("#{'${robot.shequxinxiangL.rect}'.split(',')}")
+    private int[] shequxinxiangLRect;
+
+    @Value("#{'${robot.shequxinxiangL.color}'.split(',')}")
+    private int[] shequxinxiangLColor;
+
+
+    @Value("#{'${robot.cross.coord}'.split(',')}")
+    private int[] crossCoord;
+
+
+
+    public static void main(String[] args) throws AWTException, InterruptedException {
+        // new ScreenshotServiceImpl().getResult(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
+        new ScreenshotServiceImpl().getResult2(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
+//        new ScreenshotServiceImpl().keyPressString(new Robot(), "299313080");
         System.out.println("test");
     }
 
-    static BufferedImage base64StringToImage(String base64String) {
+    private static BufferedImage base64StringToImage(String base64String) {
         try {
             byte[] bytes1 = decoder.decodeBuffer(base64String);
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes1);
-            BufferedImage bi1 = ImageIO.read(bais);
-            return bi1;
+            return ImageIO.read(bais);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private boolean compareColor(Color color1, Color color2) {
+        return color1.getRed() == color2.getRed() &&
+                color1.getBlue() == color2.getBlue() &&
+                color1.getGreen() == color2.getGreen();
+    }
+
+    private void waitColor(Color needColor, int rangeX, int rangeY, int rangeW, int rangeH) throws AWTException, InterruptedException {
+        Robot robot = new Robot();
+        long t;
+        while (true) {
+            BufferedImage image = robot.createScreenCapture(new Rectangle(rangeX, rangeY, rangeW, rangeH));
+            int x, y;
+            try {
+                t = new java.util.Date().getTime();
+                for (x = 0; x < rangeW - 1; x++) {
+                    for (y = 0; y < rangeH - 1; y++) {
+                        Color color = new Color(image.getRGB(x - rangeX, y - rangeY));
+                        if (compareColor(color, needColor)) {
+                            System.out.println(new java.util.Date().getTime() - t);
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Thread.sleep(100);
+        }
+    }
+
+    private void waitColor(Color needColor, Rectangle range) throws AWTException, InterruptedException {
+        Robot robot = new Robot();
+        long t;
+        while (true) {
+            BufferedImage image = robot.createScreenCapture(range);
+            int x, y;
+            try {
+                t = new java.util.Date().getTime();
+                for (x = 0; x < range.getWidth() - 1; x++) {
+                    for (y = 0; y < range.getHeight() - 1; y++) {
+                        Color color = new Color(image.getRGB(x - Double.valueOf(range.getX()).intValue(), Double.valueOf(y - range.getY()).intValue()));
+                        if (compareColor(color, needColor)) {
+                            System.out.println(new java.util.Date().getTime() - t);
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Thread.sleep(100);
+        }
+    }
+
+    private static void keyPressString(Robot r, String str) throws InterruptedException {
+        byte[] bytes = str.getBytes();
+        for (byte e : bytes) {
+            r.keyPress(e);
+            r.keyRelease(e);
+            Thread.sleep(50);
+        }
+    }
+
+    private static void mouseClick(Robot r, int x, int y) {
+        r.mouseMove(x, y);
+        r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+    }
+
+    @SuppressWarnings("AccessStaticViaInstance")
+    public BufferedImage getResult2(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX,
+                                    Integer offsetY) throws AWTException, InterruptedException {
+        // 点击逛一逛
+        Robot robot = new Robot();
+        this.mouseClick(robot, gygCoord[0], gygCoord[1]);
+        // 等待加载并输入米米号
+        Color inputMi = new Color(inputMiColor[0], inputMiColor[1], inputMiColor[2]);
+        this.waitColor(inputMi, new Rectangle(inputMiRect[0], inputMiRect[1], inputMiRect[2], inputMiRect[3]));
+        this.mouseClick(robot, inputMiCoord[0], inputMiCoord[1]);
+        this.keyPressString(robot, miNum.toString());
+        // 点击确认
+        this.mouseClick(robot, confirmMiCoord[0], confirmMiCoord[1]);
+        // 等待加载并点击头像
+        Color dianzan = new Color(dianzanColor[0], dianzanColor[1], dianzanColor[2]);
+        this.waitColor(dianzan, new Rectangle(dianzanRect[0], dianzanRect[1], dianzanRect[2], dianzanRect[3]));
+        this.mouseClick(robot, dianzanCoord[0], dianzanCoord[1]);
+        // 等待加载社区形象按钮并点击
+        Color shequxinxiang = new Color(shequxinxiangColor[0], shequxinxiangColor[1], shequxinxiangColor[2]);
+        this.waitColor(shequxinxiang, new Rectangle(shequxinxiangRect[0], shequxinxiangRect[1], shequxinxiangRect[2], shequxinxiangRect[3]));
+        this.mouseClick(robot, shequxinxiangCoord[0], shequxinxiangCoord[1]);
+        Color shequxinxiangL = new Color(shequxinxiangLColor[0], shequxinxiangLColor[1], shequxinxiangLColor[2]);
+        this.waitColor(shequxinxiangL, new Rectangle(shequxinxiangLRect[0], shequxinxiangLRect[1], shequxinxiangLRect[2], shequxinxiangLRect[3]));
+
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e2) {
+            e2.printStackTrace();
+        }
+        System.out.println("已点击完成，接下来交由Selenium调整并截图");
+
+
+        System.setProperty("webdriver.chrome.driver", "C:/Users/Admin/Downloads/chromedriver.exe");
+        ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
+        ChromeDriver driver = new ChromeDriver(options);
+
+        // 直接开启设备模拟，不要再手动开devtools了，否则截图截的是devtools的界面！
+        Map<String, Object> map = new HashMap<>();
+        map.put("mobile", false);
+        map.put("width", resolutionX);
+        map.put("height", resolutionY);
+        map.put("deviceScaleFactor", 1);
+        driver.executeCdpCommand("Emulation.setDeviceMetricsOverride", map);
+        // 缩放Flash
+        driver.executeScript("document.getElementsByTagName(\"embed\")[0].Zoom(500)");
+        // Flash缩放后的视野位置微调
+        driver.executeScript("document.getElementsByTagName(\"embed\")[0].Zoom(" + (new Float(10000 / scale / 100)).intValue() + ");document.getElementsByTagName(\"embed\")[0].Pan(" + offsetX + ", " + offsetY + ", 0)");
+        // 等待Flash缩放完成，待完善
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+        // 执行截图
+        Map<String, Object> map2 = new HashMap<>();
+        map2.put("fromSurface", true);
+        String imageBase64 = driver.executeCdpCommand("Page.captureScreenshot", map2).get("data").toString();
+        System.out.println(imageBase64.length());
+        // 关闭设备模拟
+        driver.executeCdpCommand("Emulation.clearDeviceMetricsOverride", new HashMap<>());
+        // Flash缩放复原
+        driver.executeScript("document.getElementsByTagName(\"embed\")[0].Zoom(500)");
+        // 关闭面板，等待后续的截图请求
+        this.mouseClick(robot, crossCoord[0], crossCoord[1]);
+        // 返回的base64内容写入PNG文件
+        return base64StringToImage(imageBase64);
     }
 
     /**

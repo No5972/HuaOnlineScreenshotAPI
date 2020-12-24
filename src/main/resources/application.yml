@@ -7,3 +7,27 @@ spring:
 sikuli:
   hua:
     imagePath: C:/Users/Admin/Pictures/autoscreenshot/
+
+robot:
+  gyg:
+    coord: 0,0
+  inputMi:
+    color: 0,0,0
+    coord: 0,0
+    rect: 0,0,0,0
+  confirmMi:
+    coord: 0,0
+  dianzan:
+    color: 0,0,0
+    coord: 0,0
+    rect: 0,0,0,0
+  shequxinxiang:
+    color: 0,0,0
+    coord: 0,0
+    rect: 0,0,0,0
+  shequxinxiangL:
+    color: 0,0
+    coord: 0,0
+    rect: 0,0,0,0
+  cross:
+    coord: 0,0

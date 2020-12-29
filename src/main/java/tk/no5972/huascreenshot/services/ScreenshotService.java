@@ -6,6 +6,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public interface ScreenshotService {
-	BufferedImage getResult(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX, Integer offsetY) throws FindFailed;
-	BufferedImage getResult2(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX, Integer offsetY) throws AWTException, InterruptedException;
+	BufferedImage getResult(Long miNum, Integer resolutionX, Integer resolutionY, Double scale, Integer offsetX, Integer offsetY) throws FindFailed;
+	BufferedImage getResult2(Long miNum, Integer resolutionX, Integer resolutionY, Double scale, Integer offsetX, Integer offsetY) throws AWTException, InterruptedException;
 }

@@ -8,26 +8,27 @@ sikuli:
   hua:
     imagePath: C:/Users/Admin/Pictures/autoscreenshot/
 
+# 当前坐标环境：1920x1080，字体缩放124%，百分浏览器最大化，Flash缩放100%
 robot:
   gyg:
-    coord: 0,0
+    coord: 1652,951
   inputMi:
-    color: 0,0,0
-    coord: 0,0
-    rect: 0,0,0,0
+    color: 195,134,81
+    coord: 981,291
+    rect: 894,269,253,80
   confirmMi:
-    coord: 0,0
+    coord: 1099,291
   dianzan:
-    color: 0,0,0
-    coord: 0,0
-    rect: 0,0,0,0
+    color: 255,255,240
+    coord: 1291,162
+    rect: 1245,115,108,93
   shequxinxiang:
-    color: 0,0,0
-    coord: 0,0
-    rect: 0,0,0,0
+    color: 134,62,100
+    coord: 1082,945
+    rect: 1092,919,122,55
   shequxinxiangL:
-    color: 0,0
-    coord: 0,0
-    rect: 0,0,0,0
+    color: 204,92,150
+    coord: 1082,945
+    rect: 1092,919,122,55
   cross:
-    coord: 0,0
+    coord: 1389,261

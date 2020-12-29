@@ -27,7 +27,7 @@ public class ScreenshotAction {
 			Long miNum,
 			Integer resolutionX, 
 			Integer resolutionY, 
-			Integer scale, 
+			Double scale, 
 			Integer offsetX,
 			Integer offsetY,
 			HttpServletResponse response) throws IOException {
@@ -61,7 +61,7 @@ public class ScreenshotAction {
 			*/
 			
 			response.setContentType("image/png");
-			BufferedImage bufferedImage = screenshotService.getResult(miNum, resolutionX, resolutionY, scale, offsetX, offsetY);
+			BufferedImage bufferedImage = screenshotService.getResult2(miNum, resolutionX, resolutionY, scale, offsetX, offsetY);
 			ImageIO.write(bufferedImage, "png", response.getOutputStream());
 			isAvailble = true;
 		} catch (IOException e) {

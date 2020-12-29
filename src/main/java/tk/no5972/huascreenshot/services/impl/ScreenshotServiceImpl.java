@@ -81,7 +81,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     public static void main(String[] args) throws AWTException, InterruptedException {
         // new ScreenshotServiceImpl().getResult(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
-        new ScreenshotServiceImpl().getResult2(Long.parseLong("299313080"), 4320, 7680, 5, -4500, -2000);
+        new ScreenshotServiceImpl().getResult2(Long.parseLong("299313080"), 4320, 7680, 5D, -4500, -2000);
 //        new ScreenshotServiceImpl().keyPressString(new Robot(), "299313080");
         System.out.println("test");
     }
@@ -137,7 +137,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
                 t = new java.util.Date().getTime();
                 for (x = 0; x < range.getWidth() - 1; x++) {
                     for (y = 0; y < range.getHeight() - 1; y++) {
-                        Color color = new Color(image.getRGB(x - Double.valueOf(range.getX()).intValue(), Double.valueOf(y - range.getY()).intValue()));
+                        Color color = new Color(image.getRGB(x, y));
                         if (compareColor(color, needColor)) {
                             System.out.println(new java.util.Date().getTime() - t);
                             return;
@@ -160,17 +160,25 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         }
     }
 
-    private static void mouseClick(Robot r, int x, int y) {
-        r.mouseMove(x, y);
+    private static void mouseClick(Robot r, int x, int y) throws AWTException {
+    	r = new Robot();
+    	// https://stackoverflow.com/questions/48837741/java-robot-mousemovex-y-not-producing-correct-results
+    	for(int count = 0;(MouseInfo.getPointerInfo().getLocation().getX() != x || 
+                MouseInfo.getPointerInfo().getLocation().getY() != y) &&
+                count < 10; count++) {
+    		System.out.println("移动了" + (count + 1) + "次");
+    		r.mouseMove(x, y);
+    	}
         r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
-    @SuppressWarnings("AccessStaticViaInstance")
-    public BufferedImage getResult2(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX,
+    @SuppressWarnings({ "AccessStaticViaInstance", "static-access" })
+    public BufferedImage getResult2(Long miNum, Integer resolutionX, Integer resolutionY, Double scale, Integer offsetX,
                                     Integer offsetY) throws AWTException, InterruptedException {
         // 点击逛一逛
         Robot robot = new Robot();
+        robot.mouseMove(0, 0);
         this.mouseClick(robot, gygCoord[0], gygCoord[1]);
         // 等待加载并输入米米号
         Color inputMi = new Color(inputMiColor[0], inputMiColor[1], inputMiColor[2]);
@@ -181,11 +189,17 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         this.mouseClick(robot, confirmMiCoord[0], confirmMiCoord[1]);
         // 等待加载并点击头像
         Color dianzan = new Color(dianzanColor[0], dianzanColor[1], dianzanColor[2]);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e2) {
+            e2.printStackTrace();
+        }
         this.waitColor(dianzan, new Rectangle(dianzanRect[0], dianzanRect[1], dianzanRect[2], dianzanRect[3]));
         this.mouseClick(robot, dianzanCoord[0], dianzanCoord[1]);
         // 等待加载社区形象按钮并点击
         Color shequxinxiang = new Color(shequxinxiangColor[0], shequxinxiangColor[1], shequxinxiangColor[2]);
         this.waitColor(shequxinxiang, new Rectangle(shequxinxiangRect[0], shequxinxiangRect[1], shequxinxiangRect[2], shequxinxiangRect[3]));
+        robot = new Robot();
         this.mouseClick(robot, shequxinxiangCoord[0], shequxinxiangCoord[1]);
         Color shequxinxiangL = new Color(shequxinxiangLColor[0], shequxinxiangLColor[1], shequxinxiangLColor[2]);
         this.waitColor(shequxinxiangL, new Rectangle(shequxinxiangLRect[0], shequxinxiangLRect[1], shequxinxiangLRect[2], shequxinxiangLRect[3]));
@@ -248,7 +262,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
      * </ol>
      */
     @Override
-    public BufferedImage getResult(Long miNum, Integer resolutionX, Integer resolutionY, Integer scale, Integer offsetX,
+    public BufferedImage getResult(Long miNum, Integer resolutionX, Integer resolutionY, Double scale, Integer offsetX,
                                    Integer offsetY) throws FindFailed {
         try {
             Screen s = new Screen();

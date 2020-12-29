@@ -38,7 +38,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">放大倍率：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" type="number" required lay-verify="required" name="scale" step="0.1" min="1" max="8" value="5" />
+                    <input class="layui-input" type="number" required lay-verify="required" name="scale" step="0.1" min="1" max="8" value="4" />
                 </div>
             </div>
             <div class="layui-form-item">

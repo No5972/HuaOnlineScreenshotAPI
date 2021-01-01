@@ -1,0 +1,34 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+sikuli:
+  hua:
+    imagePath: C:/Users/Admin/Pictures/autoscreenshot/
+
+# 当前坐标环境：1024x768，字体不缩放，百分浏览器最大化，Flash缩放20% (Zoom(500))
+robot:
+  gyg:
+    coord: 981,620
+  inputMi:
+    color: 204,138,44
+    coord: 585,225
+    rect: 533,212,134,26
+  confirmMi:
+    coord: 656,225
+  dianzan:
+    color: 255,255,241
+    coord: 774,145
+    rect: 743,116,100,62
+  shequxinxiang:
+    color: 186,144,101
+    coord: 646,613
+    rect: 604,596,76,37
+  shequxinxiangL:
+    color: 254,240,246
+    coord: 646,613
+    rect: 604,596,76,37
+  cross:
+    coord: 827,205

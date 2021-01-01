@@ -41,8 +41,8 @@ public class ScreenshotAction {
 				return;
 			}
 			isAvailble = false;
-			Screen s = new Screen();
-			System.out.println(s);
+			// Screen s = new Screen();
+			// System.out.println(s);
 			/*
 			//想要返回图片的路径
 			FileInputStream fis = new FileInputStream("C:/Users/Admin/hao123.png") ;
